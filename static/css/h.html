@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piyush Joshi - Software Engineer Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --secondary-color: #3f51b5;
+            --accent-color: #ff4081;
+            --text-color: #ffffff;
+            --background-color: #0a0a1a;
+            --card-bg-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: rgba(26, 35, 126, 0.8);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+
+        section {
+            padding: 80px 0;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 20px;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-content {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #d81b60;
+            transform: translateY(-3px);
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .skill {
+            background-color: var(--card-bg-color);
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            width: calc(33.333% - 20px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .skill:hover {
+            transform: translateY(-5px) rotateY(10deg);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project {
+            background-color: var(--card-bg-color);
+            padding: 20px;
+            border-radius: 5px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project:hover {
+            transform: translateY(-5px) rotateY(10deg);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .achievements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .achievement {
+            background-color: var(--card-bg-color);
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .achievement:hover {
+            transform: translateY(-5px) rotateY(10deg);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: var(--text-color);
+            font-size: 24px;
+            margin: 0 10px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            padding: 10px;
+            width: 300px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .search-container button {
+            padding: 10px 20px;
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        .qa-section {
+            background-color: var(--card-bg-color);
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 40px;
+        }
+
+        .qa-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .qa-button {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .qa-button:hover {
+            background-color: var(--accent-color);
+        }
+
+        .qa-answer {
+            min-height: 100px;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .skill {
+                width: calc(50% - 20px);
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .search-container input {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .skill {
+                width: 100%;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .search-container input {
+                width: 150px;
+            }
+
+            .qa-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#achievements">Achievements</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>Piyush Joshi</h1>
+                <p>Software Engineer | B.Tech Computer Engineering Student</p>
+                <a href="#contact" class="btn">Get in Touch</a>
+            </div>
+        </section>
+
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search...">
+            <button onclick="search()">Search</button>
+        </div>
+
+        <section id="about" class="container">
+            <h2>About Me</h2>
+            <p>I'm a dedicated third-year B.Tech student at GH Raisoni College of Engineering and Management, Pune, with a strong hackathon background—15+ participations and 5 wins. My experience has honed my ability to swiftly solve complex problems and adapt to new technologies, making me a versatile and efficient contributor in dynamic environments.</p>
+        </section>
+
+        <section id="skills" class="container">
+            <h2>Skills</h2>
+            <div class="skills">
+                <div class="skill">C++ (DSA)</div>
+                <div class="skill">React.js</div>
+                <div class="skill">HTML/CSS/JS</div>
+                <div class="skill">MySQL</div>
+                <div class="skill">Firebase</div>
+                <div class="skill">Java</div>
+                <div class="skill">OpenCV</div>
+                <div class="skill">XGBoost</div>
+                <div class="skill">TensorFlow</div>
+                <div class="skill">Unity</div>
+            </div>
+        </section>
+
+        <section id="projects" class="container">
+            <h2>Projects</h2>
+            <div class="projects">
+                <div class="project">
+                    <h3>Cogno Solution</h3>
+                    <p>Computerized cognitive Retraining Program with patient support and doctor assistance features.</p>
+                </div>
+                <div class="project">
+                    <h3>Traffic Flow Optimization System</h3>
+                    <p>Optimized traffic signals that adjust green light timings based on real-time traffic data.</p>
+                </div>
+                <div class="project">
+                    <h3>Green Credit System</h3>
+                    <p>Tree Plantation and Reservation system that tracks and manages credits through a digital platform to encourage environmental responsibility.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="achievements" class="container">
+            <h2>Achievements</h2>
+            <div class="achievements">
+                <div class="achievement">
+                    <h3>Rackathon Hackathon</h3>
+                    <p>Winner in National Level and Innovation Hackathon, Amravati</p>
+                </div>
+                <div class="achievement">
+                    <h3>Tantra Hackathon</h3>
+                    <p>Winner in Fastest Website Maker SPPU University, Pune</p>
+                </div>
+                <div class="achievement">
+                    <h3>NextNitch Hackathon</h3>
+                    <p>2nd Runner-up in Army Institute Of Technology, Pune</p>
+                </div>
+                <div class="achievement">
+                    <h3>DIY Game Dev</h3>
+                    <p>Winner in Game Development with Unity Engine, Intercollege Competition</p>
+                </div>
+                <div class="achievement">
+                    <h3>SIH 2023</h3>
+                    <p>Grand Finalist, Chennai</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="qa" class="container">
+            <h2>Q&A</h2>
+            <div class="qa-section">
+                <div class="qa-buttons">
+                    <button class="qa-button" onclick="showAnswer('hire')">Why should you hire me?</button>
+                    <button class="qa-button" onclick="showAnswer('about')">Tell me about yourself</button>
+                    <button class="qa-button" onclick="showAnswer('strengths')">What are your strengths?</button>
+                    <button class="qa-button" onclick="showAnswer('weaknesses')">What are your weaknesses?</button>
+                </div>
+                <div id="qa-answer" class="qa-answer"></div>
+            </div>
+        </section>
+
+        <section id="contact" class="container">
+            <h2>Contact Me</h2>
+            <p>Phone: +91 7588322122</p>
+            <p>Email: piyushaundhekar@gmail.com</p>
+            <a href="https://profilo-piyush.vercel.app/" target="_blank" class="btn">Visit My Portfolio</a>
+            <div class="social-links">
+                <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Piyush Joshi. All rights reserved.</p>
+    </footer>
+
+    
+
+    <script>
+        // 3D Background
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
+        const material = new THREE.MeshBasicMaterial({ color: 0x3f51b5, wireframe: true });
+        const torusKnot = new THREE.Mesh(geometry, material);
+        scene.add(torusKnot);
+
+        camera.position.z = 30;
+
+        const particles = new THREE.Group();
+        scene.add(particles);
+
+        for (let i = 0; i < 200; i++) {
+            const geometry = new THREE.SphereGeometry(0.1, 32, 32);
+            const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            const particle = new THREE.Mesh(geometry, material);
+            
+            const x = Math.random() * 40 - 20;
+            const y = Math.random() * 40 - 20;
+            const z = Math.random() * 40 - 20;
+            
+            particle.position.set(x, y, z);
+            particles.add(particle);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            torusKnot.rotation.x += 0.01;
+            torusKnot.rotation.y += 0.01;
+            particles.rotation.x += 0.001;
+            particles.rotation.y += 0.002;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Responsive 3D background
+        window.addEventListener('resize', () => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Scroll animations
+        const sections = document.querySelectorAll('section');
+        const options = {
+            root: null,
+            threshold: 0.3,
+            rootMargin: "0px"
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, options);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Search functionality
+        function search() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const sections = document.querySelectorAll('section');
+            
+            sections.forEach(section => {
+                const content = section.textContent.toLowerCase();
+                if (content.includes(searchTerm)) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                    return;
+                }
+            });
+        }
+
+        // Q&A Typing Effect
+        const answers = {
+            hire: "You should hire me because I bring a unique combination of technical skills, problem-solving abilities, and a proven track record of success in hackathons. My experience in various programming languages and technologies, coupled with my ability to adapt quickly to new challenges, makes me an ideal candidate for any software engineering role.",
+            about: "I'm Piyush Joshi, a passionate third-year B.Tech student specializing in Computer Engineering. With a strong foundation in various programming languages and technologies, I've participated in over 15 hackathons, winning 5 of them. This experience has sharpened my problem-solving skills and ability to work effectively under pressure.",
+            strengths: "My key strengths include my proficiency in multiple programming languages, my ability to quickly adapt to new technologies, and my experience in developing innovative solutions under tight deadlines. I'm also a strong team player with excellent communication skills, which I've honed through my participation in numerous hackathons and group projects.",
+            weaknesses: "One area I'm constantly working on improving is my time management. While I'm able to meet deadlines, I sometimes find myself working longer hours than necessary. To address this, I've been implementing better planning and prioritization techniques, which have already shown positive results in my recent projects."
+        };
+
+        function showAnswer(key) {
+            const answerElement = document.getElementById('qa-answer');
+            answerElement.innerHTML = '';
+            let i = 0;
+            const typing = setInterval(() => {
+                if (i < answers[key].length) {
+                    answerElement.innerHTML += answers[key].charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typing);
+                }
+            }, 20);
+        }
+    </script>
+</body>
+</html>
