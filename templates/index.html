@@ -1,0 +1,73 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Track-V Dashboard</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  </head>
+  <body>
+   <div class="container">
+    <div class="toggle-btn" id="toggleBtn">☰</div>
+
+    <div class="sidebar" id="sidebar">
+            <div class="logo">Track-V</div>
+            <div class="nav-item active" data-page="dashboard">📊 Dashboard</div>
+            <div class="nav-item" data-page="reports">📈 Reports</div>
+            <div class="nav-item" data-page="settings">⚙️ Settings</div>
+            <div class="nav-item" data-page="help">❓ Help</div>
+            <div class="nav-item" data-page="profile">👤 Profile</div>
+            <div class="nav-item" data-page="weather">🌤️ Weather</div>
+            <div class="nav-item" data-page="inspectors">👮 Inspectors</div>
+            <div class="nav-item" data-page="map">🗺️ Map View</div>
+            <a href="index.html" class="logout-btn">Logout</a>
+        </div>
+
+        <div id="mainContent" class="main-content">
+            <div id="toggleBtn" class="toggle-btn">☰</div>
+            <h1>Traffic Dashboard</h1>
+            <div class="system-mode">
+                System Mode: <span id="systemMode">Online</span>
+                <button id="modeSwitch" class="button">Switch to Manual Mode</button>
+            </div>
+            <div class="video-grid">
+                <!-- Video feeds will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="addInspectorModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add Inspector</h2>
+            <form id="addInspectorForm">
+                <input type="hidden" id="junctionId" name="junctionId">
+                <label for="inspectorName">Name:</label>
+                <input type="text" id="inspectorName" name="inspectorName" required>
+                <label for="inspectorPhone">Phone:</label>
+                <input type="tel" id="inspectorPhone" name="inspectorPhone" required>
+                <label for="inspectorEmail">Email:</label>
+                <input type="email" id="inspectorEmail" name="inspectorEmail" required>
+                <button type="submit" class="button">Add Inspector</button>
+            </form>
+        </div>
+        
+    </div>
+ 
+
+    <script src="https://cdn.botpress.cloud/webchat/v2.1/inject.js"></script>
+    <script src="https://mediafiles.botpress.cloud/19195709-f157-43c6-a6fe-606890c37897/webchat/v2.1/config.js"></script>
+    <script>
+     
+      </script>
+
+      <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>
